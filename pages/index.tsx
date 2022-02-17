@@ -7,6 +7,7 @@ import styles from "../styles/Home.module.css";
 
 const Home: NextPage = () => {
   const { data: session } = useSession();
+  // console.log(session);
 
   return (
     <div className={styles.container}>
@@ -29,7 +30,7 @@ const Home: NextPage = () => {
         )}
         {session && (
           <>
-            Signed in as {session.profile.username} <br />
+            Signed in as {JSON.stringify(session)} <br />
             <button onClick={() => signOut()}>Sign out</button>
           </>
         )}
