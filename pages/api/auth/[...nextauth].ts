@@ -3,10 +3,9 @@ import TwitterProvider from "next-auth/providers/twitter";
 import { UpstashRedisAdapter } from "@next-auth/upstash-redis-adapter";
 import upstashRedisClient from "@upstash/redis";
 
-const redis = upstashRedisClient(
-  process.env.UPSTASH_REDIS_URL,
-  process.env.UPSTASH_REDIS_TOKEN
-);
+import { updateUsername } from "@/model/User";
+
+const redis = upstashRedisClient();
 
 export default NextAuth({
   adapter: UpstashRedisAdapter(redis),
@@ -14,29 +13,33 @@ export default NextAuth({
     TwitterProvider({
       clientId: process.env.TWITTER_ID,
       clientSecret: process.env.TWITTER_SECRET,
-      version: "2.0", // opt-in to Twitter OAuth 2.0
+      version: "2.0",
       profile(profile) {
-        return { ...profile?.data, twitterId: profile?.data?.id };
+        return { ...profile?.data };
       },
     }),
   ],
   callbacks: {
-    // async jwt({ token, user, account, profile, isNewUser }) {
-    async jwt({ token, profile }) {
-      if (profile?.data) token.profile = profile.data;
+    // async jwt({ token, profile }) {
+    //   if (profile?.data) token.profile = profile.data;
 
-      return token;
-    },
+    //   return token;
+    // },
     async session({ session, token, user }) {
       if (user) {
         session.user = user;
       }
 
-      if (token?.profile) {
-        session.user = { ...session.user, ...token.profile };
-      }
+      // if (token?.profile) {
+      //   session.user = { ...session.user, ...token.profile };
+      // }
 
       return session;
+    },
+  },
+  events: {
+    async signIn({ user, profile }) {
+      updateUsername(user.id, profile.username);
     },
   },
 });
