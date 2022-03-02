@@ -2,7 +2,6 @@ import type { NextPage } from "next";
 
 import Layout from "@/components/Layout";
 
-// FIXME: only logged users allowed
 const Home: NextPage = () => {
   return (
     <>
@@ -12,5 +11,7 @@ const Home: NextPage = () => {
     </>
   );
 };
+
+Home.auth = true;
 
 export default Home;

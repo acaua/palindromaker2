@@ -25,12 +25,6 @@ export const getServerSideProps: GetServerSideProps = async ({
   params,
   req,
 }) => {
-  // params contains the post `id`.
-  // If the route is like /posts/1, then params.id is 1
-
-  // Pass post data to the page via props
-  console.log(params);
-
   const session = await getSession({ req });
 
   const username = params?.username;
