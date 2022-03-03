@@ -44,14 +44,23 @@ export async function getPostsFromUser(
   return posts;
 }
 
-export async function createPost(authorId: string, post: {}) {
+export async function createPost(
+  authorId: string,
+  post: { title: string | undefined; content: string }
+) {
   const postId = uuid();
   const createdAt = Date.now();
-
   const postFull = { ...post, id: postId, createdAt, authorId };
 
-  await set(POST_PREFIX + postId, JSON.stringify(postFull));
-  await lpush(POST_AUTHOR_PREFIX + authorId, postId);
+  const postRes = await set(POST_PREFIX + postId, JSON.stringify(postFull));
+  if (postRes.error) {
+    return false;
+  }
+
+  const authorRes = await lpush(POST_AUTHOR_PREFIX + authorId, postId);
+  if (authorRes.error) {
+    return false;
+  }
 
   return postFull;
 }
