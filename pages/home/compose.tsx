@@ -1,25 +1,36 @@
 import React, { useState } from "react";
 import type { NextPage } from "next";
+import { useRouter } from "next/router";
 
 import Layout from "@/components/Layout";
 
 const PostCompose: NextPage = () => {
+  const router = useRouter();
+  const [status, setStatus] = useState("idle");
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setStatus("submitting");
 
     const post = {
       title: event.target.title.value,
       content: event.target.content.value,
     };
 
-    const response = await fetch("/api/post", {
-      body: JSON.stringify(post),
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch("/api/post", {
+        body: JSON.stringify(post),
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (!response.ok) {
+        throw new Error();
+      }
 
-    const result = await response.json();
-    console.log(result);
+      router.push("/home");
+    } catch (error) {
+      setStatus("error");
+    }
   };
 
   return (
@@ -47,7 +58,10 @@ const PostCompose: NextPage = () => {
               maxLength={10000}
             />
           </div>
-          <button type="submit">Post</button>
+          {status === "error" && <div>Error</div>}
+          <button type="submit" disabled={status === "submitting"}>
+            Post
+          </button>
         </form>
       </Layout>
     </>

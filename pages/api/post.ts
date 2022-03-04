@@ -20,7 +20,6 @@ export default async function handler(
 
   const [errBodyValidation, post] = validate(req.body, PostSchema);
   if (errBodyValidation) {
-    console.log(errBodyValidation);
     return res.status(400).json({ error: errBodyValidation });
   }
 
