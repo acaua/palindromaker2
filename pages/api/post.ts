@@ -23,6 +23,7 @@ export default async function handler(
     return res.status(400).json({ error: errBodyValidation });
   }
 
+  // @ts-ignore
   const postCreated = await createPost(session.user.id, post);
   if (!postCreated) {
     return res.status(500).end();

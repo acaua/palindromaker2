@@ -7,7 +7,11 @@ export default function Header() {
     <header className="">
       {session ? (
         <>
-          Signed in as {session?.user.username}
+          Signed in as{" "}
+          {
+            // @ts-ignore
+            session?.user.username
+          }
           <button onClick={() => signOut()}>Sign out</button>
         </>
       ) : (

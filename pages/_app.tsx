@@ -7,13 +7,16 @@ import "@/styles/globals.css";
 function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <SessionProvider session={session}>
-      {Component.auth ? (
-        <Auth>
+      {
+        // @ts-ignore
+        Component.auth ? (
+          <Auth>
+            <Component {...pageProps} />
+          </Auth>
+        ) : (
           <Component {...pageProps} />
-        </Auth>
-      ) : (
-        <Component {...pageProps} />
-      )}
+        )
+      }
     </SessionProvider>
   );
 }

@@ -28,7 +28,7 @@ export default PostPage;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const username = params?.username;
-  const postId = params?.postId;
+  const postId = params?.postId as string;
 
   if (!username || !postId) {
     return { notFound: true };

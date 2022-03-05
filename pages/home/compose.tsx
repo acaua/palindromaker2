@@ -13,7 +13,9 @@ const PostCompose: NextPage = () => {
     setStatus("submitting");
 
     const post = {
+      // @ts-ignore
       title: event.target.title.value,
+      // @ts-ignore
       content: event.target.content.value,
     };
 
@@ -68,6 +70,7 @@ const PostCompose: NextPage = () => {
   );
 };
 
+// @ts-ignore
 PostCompose.auth = true;
 
 export default PostCompose;

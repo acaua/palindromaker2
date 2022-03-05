@@ -39,6 +39,7 @@ export default NextAuth({
   },
   events: {
     async signIn({ user, profile }) {
+      // @ts-ignore
       updateUsername(user.id, profile.username);
     },
   },

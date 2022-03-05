@@ -33,7 +33,7 @@ const UserPage: NextPage<UserProps> = ({ user, latestPosts }) => {
 export default UserPage;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const username = params?.username;
+  const username = params?.username as string;
   if (!username) {
     return { notFound: true };
   }

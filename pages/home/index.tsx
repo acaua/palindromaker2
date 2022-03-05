@@ -26,7 +26,13 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
         {posts?.map((post) => {
           return (
             <div key={post.id}>
-              <Post authorUsername={session.user.username} post={post} />
+              <Post
+                authorUsername={
+                  // @ts-ignore
+                  session.user.username
+                }
+                post={post}
+              />
             </div>
           );
         })}
@@ -35,6 +41,7 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
   );
 };
 
+// @ts-ignore
 Home.auth = true;
 
 export default Home;
@@ -45,6 +52,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     return { props: { session: null } };
   }
 
+  // @ts-ignore
   const posts = (await getPostsFromUser(session.user.id)) ?? [];
 
   return {
