@@ -1,40 +1,36 @@
 import type { NextPage } from "next";
-import Link from "next/link";
 import { GetStaticProps, GetStaticPaths } from "next";
 
-import { getUserById, getUserIdByUsername } from "@/model/User";
-import { getPostsFromUser } from "@/model/Post";
+import { getUserById, getUserIdByUsername, UserType } from "@/model/User";
+import { getPostsFromUser, PostType } from "@/model/Post";
 import Layout from "@/components/Layout";
+import Post from "@/components/Post";
+import User from "@/components/User";
 
 interface UserProps {
-  user: {};
-  latestPosts: [];
+  user: UserType;
+  latestPosts: [PostType];
 }
 
-const User: NextPage<UserProps> = ({ user, latestPosts }) => {
+const UserPage: NextPage<UserProps> = ({ user, latestPosts }) => {
   return (
     <>
       <Layout>
-        <h1>/{user?.username}</h1>
-        <p>{JSON.stringify(user, null, 2)}</p>
-        <ul>
-          {latestPosts?.map((post) => {
-            return (
-              <li key={post.id}>
-                <Link href={`/${user.username}/${post.id}`}>
-                  <a>{post.title}</a>
-                </Link>
-                <p>{JSON.stringify(post, null, 2)}</p>
-              </li>
-            );
-          })}
-        </ul>
+        <User user={user} />
+        <h1>Latest posts</h1>
+        {latestPosts?.map((post) => {
+          return (
+            <div key={post.id}>
+              <Post authorUsername={user.username} post={post} />
+            </div>
+          );
+        })}
       </Layout>
     </>
   );
 };
 
-export default User;
+export default UserPage;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const username = params?.username;

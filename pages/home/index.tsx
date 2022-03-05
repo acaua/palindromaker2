@@ -1,16 +1,18 @@
 import type { NextPage } from "next";
 import Link from "next/link";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 
-import { getPostsFromUser } from "@/model/Post";
+import { getPostsFromUser, PostType } from "@/model/Post";
 import Layout from "@/components/Layout";
+import Post from "@/components/Post";
 
 interface HomeProps {
-  posts: [];
+  posts: [PostType];
 }
 
 const Home: NextPage<HomeProps> = ({ posts }) => {
+  const { data: session } = useSession();
   return (
     <>
       <Layout>
@@ -21,15 +23,13 @@ const Home: NextPage<HomeProps> = ({ posts }) => {
           </a>
         </Link>
         <h2>Latest posts</h2>
-        <ul>
-          {posts?.map((post) => {
-            return (
-              <li key={post.id}>
-                <p>{JSON.stringify(post, null, 2)}</p>
-              </li>
-            );
-          })}
-        </ul>
+        {posts?.map((post) => {
+          return (
+            <div key={post.id}>
+              <Post authorUsername={session.user.username} post={post} />
+            </div>
+          );
+        })}
       </Layout>
     </>
   );
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     return { props: { session: null } };
   }
 
-  const posts = (await getPostsFromUser(session.user.id)) || [];
+  const posts = (await getPostsFromUser(session.user.id)) ?? [];
 
   return {
     props: { session, posts },

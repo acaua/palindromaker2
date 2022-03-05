@@ -3,9 +3,13 @@ import { del, get, set } from "@upstash/redis";
 const USER_PREFIX = "user:";
 const USERNAME_PREFIX = "user:username:";
 
-// interface User {
-// ...
-// }
+export interface UserType {
+  username: string;
+  profile_image_url: string;
+  name: string;
+  emailVerified: string;
+  id: string;
+}
 
 export async function getUserById(userId: string) {
   const response = await get(USER_PREFIX + userId);
@@ -13,7 +17,7 @@ export async function getUserById(userId: string) {
 
   let user = JSON.parse(response.data);
 
-  return user;
+  return user as UserType;
 }
 
 export async function updateUser(userId: string, updates: {}) {

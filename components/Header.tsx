@@ -7,14 +7,11 @@ export default function Header() {
     <header className="">
       {session ? (
         <>
-          Signed in as {JSON.stringify(session, null, 2)} <br />
+          Signed in as {session?.user.username}
           <button onClick={() => signOut()}>Sign out</button>
         </>
       ) : (
-        <>
-          Not signed in <br />
-          <button onClick={() => signIn("twitter")}>Sign in</button>
-        </>
+        <button onClick={() => signIn("twitter")}>Sign in</button>
       )}
     </header>
   );

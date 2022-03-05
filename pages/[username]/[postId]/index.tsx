@@ -2,33 +2,29 @@ import type { NextPage } from "next";
 import Link from "next/link";
 import { GetStaticProps, GetStaticPaths } from "next";
 
-import { getUserById } from "@/model/User";
-import { getPostById } from "@/model/Post";
+import { getUserById, UserType } from "@/model/User";
+import { getPostById, PostType } from "@/model/Post";
 import Layout from "@/components/Layout";
+import Post from "@/components/Post";
+import User from "@/components/User";
 
 interface PostProps {
-  user: {};
-  post: {};
+  user: UserType;
+  post: PostType;
 }
 
-const Post: NextPage<PostProps> = ({ user, post }) => {
+const PostPage: NextPage<PostProps> = ({ user, post }) => {
   return (
     <>
       <Layout>
-        <Link href={`/${user.username}`}>
-          <a>
-            <h1>{user.username}</h1>
-          </a>
-        </Link>
-        <a>{JSON.stringify(user, null, 2)}</a>
-        <h1>{post.title}</h1>
-        <p>{JSON.stringify(post, null, 2)}</p>
+        <User user={user} />
+        <Post authorUsername={user?.username} post={post} />
       </Layout>
     </>
   );
 };
 
-export default Post;
+export default PostPage;
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const username = params?.username;

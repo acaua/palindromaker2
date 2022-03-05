@@ -4,7 +4,8 @@ import { v4 as uuid } from "uuid";
 const POST_PREFIX = "post:";
 const POST_AUTHOR_PREFIX = "post:author:";
 
-interface Post {
+export interface PostType {
+  id: string;
   title: string;
   content: string;
   createdAt: string;
@@ -17,7 +18,7 @@ export async function getPostById(postId: string) {
 
   let post = JSON.parse(response.data);
 
-  return post;
+  return post as PostType;
 }
 
 export async function getPostsFromUser(
