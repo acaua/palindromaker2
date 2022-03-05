@@ -60,7 +60,9 @@ export async function updateUsername(userId: string, username: string) {
 
   if (user.username) {
     if (user.username !== username) {
-      promisses.push(set(USER_PREFIX + userId, { ...user, username }));
+      promisses.push(
+        set(USER_PREFIX + userId, JSON.stringify({ ...user, username }))
+      );
 
       const previousUsernameResponse = await get(
         USERNAME_PREFIX + user.username
@@ -71,7 +73,9 @@ export async function updateUsername(userId: string, username: string) {
       }
     }
   } else {
-    promisses.push(set(USER_PREFIX + userId, { ...user, username }));
+    promisses.push(
+      set(USER_PREFIX + userId, JSON.stringify({ ...user, username }))
+    );
   }
 
   await Promise.all(promisses);
